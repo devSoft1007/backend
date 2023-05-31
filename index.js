@@ -7,9 +7,9 @@ const PORT = 3000
 const {influencerRoutes} = require('./routes/routes')
 const {sequelize} = require('./DBclient/DBclient')
 
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
 // v1 api routes
 // app.use('/v1', routes);
 

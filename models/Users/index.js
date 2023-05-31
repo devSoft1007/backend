@@ -1,7 +1,8 @@
 const {sequelize} = require('../../DBclient/DBclient')
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 
-const infl = sequelize.define('UserInfluencers', {
+const UserInfl = sequelize.define('UserInfl', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -31,7 +32,11 @@ const infl = sequelize.define('UserInfluencers', {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
+        validate: {
+          notNull: { msg: "Password is required" },
+        }
       },
       userRole: {
         type: Sequelize.INTEGER,
@@ -39,7 +44,15 @@ const infl = sequelize.define('UserInfluencers', {
       },
       // Add more influencer-specific columns as needed
 },{
-    freezeTableName: true
+    freezeTableName: true,
+    hooks: {
+      beforeSave: async (user) => {
+        if (user.changed('password')) {
+          const saltRounds = 10;
+          user.password = await bcrypt.hash(user.password, saltRounds);
+        }
+      }
+    }
 });
 
 const SocialMediaAccount = sequelize.define('SocialMediaAccount', {
@@ -55,8 +68,8 @@ const SocialMediaAccount = sequelize.define('SocialMediaAccount', {
 });
 
 // Define the association between Influencer and SocialMediaAccount
-infl.hasMany(SocialMediaAccount);
-SocialMediaAccount.belongsTo(infl);
+UserInfl.hasMany(SocialMediaAccount);
+SocialMediaAccount.belongsTo(UserInfl);
 
 const brnd = sequelize.define('UserBrands', {
   id: {
@@ -97,7 +110,7 @@ sequelize.sync().then(res => {
   console.error(e)
 })
 module.exports= {
-    infl,
+    UserInfl,
     brnd,
     SocialMediaAccount
 }

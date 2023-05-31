@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {auth} = require('../../classes/auth/auth')
+const {Auth, Profile} = require('../../controllers/index')
 
 // middleware that is specific to this router
 // router.use((req, res, next) => {
@@ -9,15 +9,13 @@ const {auth} = require('../../classes/auth/auth')
 // })
 
 // influencer login
-router.post('/login', new auth(3).validate)
+router.post('/login', new Auth(3).validate)
 
 // influencer registration
-router.post('/register', new auth(3).register)
+router.post('/register', new Auth(3).register)
 
-// define the home page route
-router.get('/profile', (req, res) => {
-  res.send('influencer profile')
-})
+// profile
+router.get('/profile', new Profile(3).getProfile)
 // define the about route
 router.get('/followers', (req, res) => {
   res.send('20 followers')
