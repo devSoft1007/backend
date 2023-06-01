@@ -20,7 +20,7 @@ app.use('/api/influencer', influencerRoutes)
     console.log(`Example app listening on port ${PORT}`)
   })
 
-  sequelize.query('CREATE DATABASE IF NOT EXISTS platform')
+  sequelize.query('CREATE DATABASE IF NOT EXISTS system-backend')
   .then(() => {
     console.log('Database created or already exists');
     // Perform further operations or start your server here

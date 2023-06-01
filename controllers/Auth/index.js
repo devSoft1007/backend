@@ -1,6 +1,10 @@
 const {UserInfl, SocialMediaAccount} = require('../../models/Users/index')
 const bcrypt = require('bcrypt');
 const {Role} = require('../Role/index')
+const jwt = require('jsonwebtoken');
+const {verifyToken, privateKey} = require('../../utils/middleware/index')
+
+const expiresIn = 60*60; // Token expiration time (e.g., 1 hour)
 
 class Auth extends Role {
     constructor(role) {
@@ -24,10 +28,20 @@ class Auth extends Role {
             return res.status(401).json({ message: 'Password is not correct'})
         }
 
-        res.status(200).json({ message: 'Login successful' });  
+        
+        // Generate JWT token
+        const payload = {
+          userId: user.id,
+          exp: Math.floor(Date.now() / 1000) + expiresIn,
+        }
+        const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
+
+        res.status(200).json({ message: 'Login successful', token: token
+      });  
 
         } catch (err) {
-            res.status(500).json({ error: 'Login failed' });
+            console.error(err)
+            res.status(500).json({ message: 'Login failed', error: err });
         }
     }
 

@@ -1,12 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const {Auth, Profile} = require('../../controllers/index')
-
+const {verifyToken} = require('../../utils/middleware/index')
 // middleware that is specific to this router
 // router.use((req, res, next) => {
 //   console.log('Time: ', Date.now())
 //   next()
 // })
+
+router.use('/profile', verifyToken)
 
 // influencer login
 router.post('/login', new Auth(3).validate)

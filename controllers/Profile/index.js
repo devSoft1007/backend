@@ -15,7 +15,7 @@ class Profile extends Role {
             // Fetch the influencer profile from the database
             const influencer = await UserInfl.findOne({
               where: { id: influencerId },
-              attributes: ['id', 'name', 'email'],
+              attributes: ['id', 'name', 'email', 'username'],
               include: [{
                 model: SocialMediaAccount,
                 attributes: ['id', 'platform', 'handle']
