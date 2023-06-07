@@ -20,7 +20,14 @@ app.use('/api/influencer', influencerRoutes)
     console.log(`Example app listening on port ${PORT}`)
   })
 
-  sequelize.query('CREATE DATABASE IF NOT EXISTS system-backend')
+// Check if the database exists
+sequelize.queryInterface.showAllSchemas()
+  .then(schemas => {
+    if (!schemas.includes('system-database')) {
+      // Create the database if it doesn't exist
+      return sequelize.queryInterface.createSchema('system-database');
+    }
+  })
   .then(() => {
     console.log('Database created or already exists');
     // Perform further operations or start your server here
@@ -29,5 +36,12 @@ app.use('/api/influencer', influencerRoutes)
     console.error('An error occurred:', error);
     // Handle the error appropriately
   });
+
+  process.on('unhandledRejection', (reason, p) => {
+    console.error(reason, 'Unhandled Rejection at Promise', p);
+  }).on('uncaughtException', err => {
+    console.error(err, 'Uncaught Exception thrown');
+    process.exit(1);
+  });  
 
 module.exports = app;

@@ -9,7 +9,9 @@ const {verifyToken} = require('../../utils/middleware/index')
 // })
 
 router.use('/profile', verifyToken)
+router.use('/updateProfile', verifyToken)
 
+// define the home page route')
 // influencer login
 router.post('/login', new Auth(3).validate)
 
@@ -18,6 +20,12 @@ router.post('/register', new Auth(3).register)
 
 // profile
 router.get('/profile', new Profile(3).getProfile)
+
+// update profile
+router.put('/updateProfile', new Profile(3).updateProfile)
+
+// follow
+
 // define the about route
 router.get('/followers', (req, res) => {
   res.send('20 followers')

@@ -31,7 +31,7 @@ const UserInfl = sequelize.define('UserInfl', {
         }
       },
       profilePicture: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
       },
       password: {

@@ -6,6 +6,7 @@ const publicKey = fs.readFileSync("public.key");
 
 async function verifyToken(req, res, next) {
   try {
+    console.log(req)
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {
       const token = authHeader.split(" ")[1];
@@ -23,6 +24,7 @@ async function verifyToken(req, res, next) {
           } else {
             // Token verification successful
             console.log("Decoded token:", decoded);
+            // req.payload = decoded;
             next()
           }
         }
